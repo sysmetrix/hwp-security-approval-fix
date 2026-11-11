@@ -26,6 +26,49 @@ ASCII 경로: True
 비트: x86
 ```
 
+## 설치 후 사용법
+
+**설치는 한 번이면 끝입니다.** 그 뒤로는 평소처럼 쓰면 됩니다. 따로 켜거나 누를 것이 없습니다.
+
+### 1. 그냥 한글 쓰는 분
+아무것도 안 해도 됩니다. 자동화 도구가 한글 문서를 열 때 "접근 허용" 창이 더 이상 뜨지 않습니다.
+
+### 2. pyhwpx를 쓰는 분
+설치만 하면 됩니다. pyhwpx가 같은 이름(`FilePathCheckerModule`)으로 보안모듈을 등록하므로 코드를 고칠 필요가 없습니다.
+
+```python
+from pyhwpx import Hwp
+hwp = Hwp()
+hwp.open(r"C:\문서\보고서.hwpx")
+```
+
+### 3. win32com으로 직접 만든 코드
+객체를 만든 직후 한 줄을 넣습니다.
+
+```python
+import win32com.client as wc
+hwp = wc.Dispatch("HWPFrame.HwpObject")
+print(hwp.RegisterModule("FilePathCheckDLL", "FilePathCheckerModule"))  # True가 나와야 정상
+hwp.Open(r"C:\문서\보고서.hwpx", "", "forceopen:true")
+```
+
+또는 이 저장소의 `scripts\hwp_approval.py`를 내 코드 옆에 두고 아래처럼 씁니다.
+
+```python
+from hwp_approval import open_hwp
+hwp = open_hwp()
+```
+
+### 4. 새 컴퓨터로 옮겼을 때
+그 컴퓨터에서 `1_설치하기.bat`을 한 번 더 실행합니다. 설정은 컴퓨터(계정)마다 따로 저장됩니다.
+
+### 5. 문제가 생기면
+| 증상 | 해야 할 일 |
+|---|---|
+| 코드에서 `RegisterModule`이 `False` | `1_설치하기.bat`을 다시 실행하고 한글을 닫았다 켭니다 |
+| 창이 다시 뜸 | `2_점검하기.bat`으로 "파일 존재: True"인지 확인합니다. False면 설치를 다시 합니다 |
+| 이 기능을 끄고 싶음 | `3_해제하기.bat` |
+
 ## 파이썬으로 한글을 자동화하는 분
 
 ```python
